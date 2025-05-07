@@ -3,7 +3,7 @@ import URL from '../models/url.model.js';
 
 export const generateShortURL = async (req, res) => {
   const body = req.body;
-  console.log(body);
+  // console.log(body);
 
   if (!body) {
     return res.status(400).json({
@@ -26,16 +26,20 @@ export const generateShortURL = async (req, res) => {
     redirectURL: body.url,
     visitedHistory: [],
   });
-
-  return res.status(200).json({
-    id: shortId
+  // const allurls = await URL.find({});
+    
+  return res.render("home", {
+    id: shortId,
+    // urls: allurls,
   });
+ 
 };
 
 export const redirectToURL = async(req,res) =>{
   const shortId = req.params.shortId;
   const entry = await URL.findOneAndUpdate({
     shortId,
+
   },
 {
   $push:{
@@ -55,4 +59,14 @@ export const urlAnalytics = async(req,res) =>{
     "totalClicks" : result.visitHistory.length,
     "analytics" : result.visitHistory
   }).status(200);
+}
+
+export const getAllURLS = async(req,res) =>{
+  const currentPath = req.path
+  const allurls = await URL.find({});
+  console.log(currentPath);
+  return res.render("home",{
+    urls: allurls,
+    currentPath: currentPath,
+  })
 }
