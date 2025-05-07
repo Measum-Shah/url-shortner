@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/url', urlRoute);
-app.use('/:shortId',urlRoute);
+
 
 // DB Connection + Start Server
 connectToMongoDb('mongodb://localhost:27017/short-url')
