@@ -1,5 +1,6 @@
 import { nanoid } from "nanoid";
 import URL from '../models/url.model.js';
+import { create } from "domain";
 
 export const generateShortURL = async (req, res) => {
   const body = req.body;
@@ -21,11 +22,14 @@ export const generateShortURL = async (req, res) => {
 
 
   const shortId = nanoid(8);
-  await URL.create({
+  // console.log(req.user);
+  const newURL = await URL.create({
     shortId: shortId,
     redirectURL: body.url,
     visitedHistory: [],
+    createdBy: req.user._id,
   });
+  console.log(newURL.createdBy);
   // const allurls = await URL.find({});
     
   return res.render("home", {
@@ -63,7 +67,7 @@ export const urlAnalytics = async(req,res) =>{
 
 export const getAllURLS = async(req,res) =>{
   const currentPath = req.path
-  const allurls = await URL.find({});
+  const allurls = await URL.find({createdBy: req.user._id});
   console.log(currentPath);
   return res.render("home",{
     urls: allurls,

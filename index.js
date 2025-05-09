@@ -3,7 +3,9 @@ import path from "path";
 import urlRoute from "./routes/url.router.js";
 import connectToMongoDb from "./connectDb.js";
 import { staticRoute } from "./routes/staticRouter.js";
-
+import { userRouter } from "./routes/user.js";
+import cookieParser from "cookie-parser";
+import { restrictToLogedInUserOnly } from "./middleware/auth.js";
 
 const PORT = 8000;
 const app = express();
@@ -14,11 +16,13 @@ app.set("views", path.resolve("./views"))
 
 //  Middleware
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 // Routes
-app.use('/url', urlRoute);
+app.use('/url',restrictToLogedInUserOnly ,urlRoute);
 app.use('/',staticRoute)
+app.use("/user",userRouter)
 
 
 // DB Connection + Start Server

@@ -36,10 +36,7 @@
     <p>http://localhost:8000/url/<%= id %></p>
   <% } %>
 
-  <% if (!locals.currentPath == "/all") { %>
-    <button><a href="/url/all">see all urls</a></button>
-  <% } %> 
- 
+
 
   <% if (locals.urls) { %>
     <table>
@@ -62,5 +59,11 @@
     </table>
   <% } %>
 
+  <% if (locals.currentPath == "/") { %>
+    <button><a href="/url/all">see all urls</a></button>
+  <% } %> 
+
+  <button><a href="/user/logout">logout</a></button>
+ 
 </body>
 </html>
